@@ -1,7 +1,9 @@
 const webpack = require('webpack');
+const glob = require('glob');
 const cleanWebpackPlugin = require('clean-webpack-plugin');
 const miniCssExtractPlugin = require('mini-css-extract-plugin');
 const htmlWebpackPlugin = require('html-webpack-plugin');
+const PurifyCSSPlugin = require('purifycss-webpack');
 
 const {resolve} = require('./utils');
 const _config = require('./config');
@@ -77,6 +79,10 @@ module.exports = function (mode) {
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': configMode.env,
                 'process.env.API': configMode.api
+            }),
+            // css tree-shaking
+            new PurifyCSSPlugin({
+                paths: glob.sync(resolve('../*.html')),
             })
         ],
         optimization: {
@@ -116,7 +122,7 @@ module.exports = function (mode) {
 
         // 清空构建目录
         webpackConfig.plugins.push(
-            new cleanWebpackPlugin(['dist'])
+            new cleanWebpackPlugin(['../dist'])
         );
 
         // 抽离css，命名采用contenthash

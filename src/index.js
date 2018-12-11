@@ -1,5 +1,6 @@
 import 'scss/index.scss';
-import { sayHello } from '../common';
+import { AClass } from './pages/home';
 let name = 'wjx';
-sayHello();
+let a = new AClass();
+a.render();
 console.log(name);
